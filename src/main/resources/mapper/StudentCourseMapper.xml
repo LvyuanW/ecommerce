@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.uoa.ecommerce.mapper.StudentCourseMapper">
+
+    <!-- 根据班级ID查询课程 -->
+    <select id="getStudentByCourse" resultType="com.uoa.ecommerce.vo.StudentCourseVO">
+        SELECT
+            sc.uid AS uid,
+            s.uid AS studentUid,
+            s.name AS studentName,
+            c.uid AS courseUid,
+            c.name AS courseName
+        FROM
+            student_course sc
+                LEFT JOIN student s ON sc.student_uid = s.uid
+                LEFT JOIN course c ON sc.course_uid = c.uid
+        WHERE
+            sc.is_deleted = 0
+          AND s.is_deleted = 0
+          AND c.is_deleted = 0
+          AND sc.course_uid = #{courseUid}
+    </select>
+
+    <!-- 根据课程ID查询班级 -->
+    <select id="getCourseByStudent" resultType="com.uoa.ecommerce.vo.StudentCourseVO">
+        SELECT
+            sc.uid AS uid,
+            s.uid AS studentUid,
+            s.name AS studentName,
+            c.uid AS courseUid,
+            c.name AS courseName
+        FROM
+            student_course sc
+                LEFT JOIN course c ON sc.course_uid = c.uid
+                LEFT JOIN student s ON sc.student_uid = s.uid
+        WHERE
+            sc.is_deleted = 0
+          AND c.is_deleted = 0
+          AND s.is_deleted = 0
+          AND sc.student_uid = #{studentUid}
+    </select>
+
+</mapper>
